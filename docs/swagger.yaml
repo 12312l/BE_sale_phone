@@ -1,0 +1,141 @@
+definitions:
+  models.User:
+    properties:
+      dob:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
+    type: object
+  request.CreateUserRequest:
+    properties:
+      dob:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      gender:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    required:
+    - dob
+    - email
+    - fullname
+    - gender
+    - password
+    - phone
+    - username
+    type: object
+  request.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: duy@example.com
+    name: Duy
+    url: http://github.com/daoduy
+  description: Đây là tài liệu API cho project học Golang
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Học Golang API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Cho phép người dùng đăng nhập bằng username và password
+      parameters:
+      - description: Thông tin đăng nhập
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Đăng nhập
+      tags:
+      - Auth
+  /users/:
+    get:
+      description: Trả về danh sách user trong hệ thống
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Lấy danh sách tất cả người dùng
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Tạo mới một người dùng trong hệ thống
+      parameters:
+      - description: Thông tin tạo người dùng
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Lỗi dữ liệu
+          schema:
+            type: string
+      summary: Tạo mới người dùng
+      tags:
+      - User
+swagger: "2.0"
