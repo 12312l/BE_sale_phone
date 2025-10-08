@@ -25,6 +25,7 @@ func ConnectDatabase() {
 	DB.AutoMigrate(
 		&models.User{},
 		&models.InvalidatedToken{},
+		&models.Address{},
 	)
 	createDefaultAdmin()
 

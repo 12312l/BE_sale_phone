@@ -25,7 +25,7 @@ func SetupRouter(r *gin.Engine) *gin.Engine {
 			adminRoutes := userRoutes.Group("/")
 			adminRoutes.Use(middleware.AuthMiddleware("ADMIN"))
 			{
-				adminRoutes.GET("/", controllers.GetAllUsers) 
+				adminRoutes.GET("/", controllers.GetAllUsers)
 				adminRoutes.GET("/:id", controllers.GetUserById)
 				// adminRoutes.DELETE("/:id", controllers.DeleteUser)
 			}
@@ -34,6 +34,15 @@ func SetupRouter(r *gin.Engine) *gin.Engine {
 		}
 	}
 
+	addressRoutes := r.Group("/address")
+	{
+		addressRoutes.Use(middleware.AuthMiddleware())
+		{
+			addressRoutes.GET("/myaddress", controllers.MyAddress)
+			addressRoutes.POST("/add", controllers.CreateAddress)
+			addressRoutes.PUT("/update/:id", controllers.UpdateAddress)
+		}
+	}
 
 	return r
 }

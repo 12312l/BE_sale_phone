@@ -21,4 +21,7 @@ var (
 	Unauthorized           = ErrorCode{1007, "You do not have permission", http.StatusForbidden}
 	InvalidDob             = ErrorCode{1008, "Your age must be at least 16", http.StatusBadRequest}
 	PasswordIncorrect      = ErrorCode{1011, "Password incorrect", http.StatusBadRequest}
+	AddressNotFound        = ErrorCode{1012, "Address not found", http.StatusNotFound}
+	DatabaseError          = ErrorCode{1013, "Database error", http.StatusInternalServerError}
+	InvalidID              = ErrorCode{1014, "Invalid ID format", http.StatusBadRequest}
 )

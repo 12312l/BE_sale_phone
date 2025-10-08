@@ -1,8 +1,6 @@
 package services
 
 import (
-	"errors"
-
 	"daoduy.com/hoc-golang/config"
 	"daoduy.com/hoc-golang/exception"
 	"daoduy.com/hoc-golang/models"
@@ -64,7 +62,7 @@ func CreateUser(userRequest request.CreateUserRequest) (models.User, error) {
 	user.Password = hashedPassword
 
 	if err := config.DB.Create(&user).Error; err != nil {
-		return models.User{}, errors.New("Không thể tạo người dùng")
+		return models.User{}, exception.NewAppException(exception.DatabaseError)
 	}
 	return user, nil
 }

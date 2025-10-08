@@ -1,7 +1,34 @@
 basePath: /
 definitions:
+  models.Address:
+    properties:
+      detailaddress:
+        type: string
+      district:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: integer
+      phone:
+        type: string
+      province:
+        type: string
+      typeaddress:
+        type: boolean
+      user_id:
+        description: Khóa ngoại trỏ đến user
+        type: integer
+      village:
+        type: string
+    type: object
   models.User:
     properties:
+      addresses:
+        description: 'Quan hệ 1-nhiều: 1 user có nhiều địa chỉ'
+        items:
+          $ref: '#/definitions/models.Address'
+        type: array
       dob:
         type: string
       email:
@@ -19,6 +46,23 @@ definitions:
       role:
         type: string
       username:
+        type: string
+    type: object
+  request.AddressRequest:
+    properties:
+      detailaddress:
+        type: string
+      district:
+        type: string
+      fullname:
+        type: string
+      phone:
+        type: string
+      province:
+        type: string
+      typeaddress:
+        type: boolean
+      village:
         type: string
     type: object
   request.CreateUserRequest:
@@ -66,6 +110,28 @@ definitions:
     required:
     - token
     type: object
+  response.AddressResponse:
+    properties:
+      detailaddress:
+        type: string
+      district:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: integer
+      phone:
+        type: string
+      province:
+        type: string
+      typeaddress:
+        type: boolean
+      user_id:
+        description: Khóa ngoại trỏ đến user
+        type: integer
+      village:
+        type: string
+    type: object
   response.ApiResponse:
     properties:
       code:
@@ -107,6 +173,124 @@ info:
   title: Học Golang API
   version: "1.0"
 paths:
+  /address/add:
+    post:
+      consumes:
+      - application/json
+      description: Người dùng có thể thêm địa chỉ mới dựa trên token JWT
+      parameters:
+      - description: Thông tin địa chỉ
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/request.AddressRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.AddressResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Thêm địa chỉ mới cho người dùng hiện tại
+      tags:
+      - Address
+  /address/myaddress:
+    get:
+      description: Lấy danh sách tất cả địa chỉ của người dùng dựa trên token JWT
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.AddressResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Lấy danh sách địa chỉ người dùng hiện tại
+      tags:
+      - Address
+  /address/update/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Người dùng có thể cập nhật địa chỉ hiện tại dựa trên token JWT
+      parameters:
+      - description: ID của địa chỉ
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Thông tin địa chỉ
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/request.AddressRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.AddressResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Cập nhật địa chỉ hiện tại của người dùng
+      tags:
+      - Address
   /auth/login:
     post:
       consumes:
