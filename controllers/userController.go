@@ -66,3 +66,26 @@ func CreateUser(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusCreated, response.Success(newUser))
 }
+
+// MyInfoUser godoc
+// @Summary Lấy thông tin người dùng hiện tại
+// @Description Lấy thông tin người dùng từ token JWT
+// @Tags User
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} response.UserResponse
+// @Failure 404 {object} map[string]string
+// @Router /users/myinfo [get]
+func MyInfoUser(c *gin.Context) {
+	userID := c.GetUint("user_id")
+
+
+	user, err := services.GetMyInfo(userID)
+	if err != nil {
+		// c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		c.Error(exception.NewAppException(exception.Unauthenticated))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Success(user))
+}

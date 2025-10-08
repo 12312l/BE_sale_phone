@@ -16,6 +16,7 @@
         "version": "1.0"
     },
     "host": "localhost:8080",
+    "basePath": "/",
     "paths": {
         "/auth/login": {
             "post": {
@@ -157,6 +158,40 @@
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.ApiResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/myinfo": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Lấy thông tin người dùng từ token JWT",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Lấy thông tin người dùng hiện tại",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -330,5 +365,18 @@
                 }
             }
         }
-    }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Nhập token theo định dạng: Bearer \u003cyour_token\u003e",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
 }

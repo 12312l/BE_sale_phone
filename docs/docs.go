@@ -169,6 +169,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/myinfo": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Lấy thông tin người dùng từ token JWT",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Lấy thông tin người dùng hiện tại",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UserResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/{id}": {
             "get": {
                 "description": "Trả về thông tin chi tiết của người dùng theo ID",
@@ -337,14 +371,27 @@ const docTemplate = `{
                 }
             }
         }
-    }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Nhập token theo định dạng: Bearer \u003cyour_token\u003e",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Học Golang API",
 	Description:      "Đây là tài liệu API cho project học Golang",

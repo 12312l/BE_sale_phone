@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   models.User:
     properties:
@@ -220,4 +221,33 @@ paths:
       summary: Lấy thông tin người dùng theo ID
       tags:
       - User
+  /users/myinfo:
+    get:
+      description: Lấy thông tin người dùng từ token JWT
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Lấy thông tin người dùng hiện tại
+      tags:
+      - User
+security:
+- BearerAuth: []
+securityDefinitions:
+  BearerAuth:
+    description: 'Nhập token theo định dạng: Bearer <your_token>'
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

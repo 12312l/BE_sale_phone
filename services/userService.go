@@ -34,6 +34,19 @@ func GetUserById(id string) (response.UserResponse, error) {
 	return userResponse, nil
 }
 
+func GetMyInfo(userID uint) (response.UserResponse, error) {
+	var user models.User
+
+	if err := config.DB.First(&user, userID).Error; err != nil {
+		return response.UserResponse{}, exception.NewAppException(exception.UserNotFound)
+	}
+
+	var userResponse response.UserResponse
+	copier.Copy(&userResponse, &user)
+	// Map sang UserResponse
+	return userResponse, nil
+}
+
 func CreateUser(userRequest request.CreateUserRequest) (models.User, error) {
 	// Check username tồn tại
 	var existing models.User

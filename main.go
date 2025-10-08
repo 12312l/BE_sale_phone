@@ -24,7 +24,17 @@ import (
 // @license.url https://opensource.org/licenses/MIT
 
 // @host localhost:8080
-// @BasePath
+// @BasePath /
+
+// ✅ Định nghĩa BearerAuth cho toàn bộ API
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Nhập token theo định dạng: Bearer <your_token>
+
+// ✅ Áp dụng bảo mật mặc định (tự động cho tất cả API, trừ API login/register)
+// @Security BearerAuth
+
 func main() {
 	// Kết nối DB
 	config.ConnectDatabase()
