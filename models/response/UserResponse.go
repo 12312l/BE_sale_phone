@@ -1,10 +1,9 @@
-package models
+package response
 
-type User struct {
+type UserResponse struct {
 	ID       uint   `json:"id" gorm:"primaryKey"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
-	Password string `json:"password"`
 	FullName string `json:"fullname"`
 	Phone    string `json:"phone"`
 	Gender   string `json:"gender"`

@@ -3,17 +3,21 @@ package utils
 import (
 	"time"
 
+	"github.com/google/uuid"
+
 	"daoduy.com/hoc-golang/config"
+	"daoduy.com/hoc-golang/models/response"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 // Tạo JWT token
-func GenerateToken(userID uint, username string, role string) (string, error) {
+func GenerateToken(userResponse response.UserResponse) (string, error) {
 	claims := jwt.MapClaims{
-		"user_id": userID,
-		"username": username,
-		"scope":   role,
-		"exp":     time.Now().Add(time.Hour * 24).Unix(), // hết hạn sau 24h
+		"jti":      uuid.NewString(), // ✅ thêm UUID cho mỗi token
+		"user_id":  userResponse.ID,
+		"username": userResponse.Username,
+		"scope":    userResponse.Role,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(), // hết hạn sau 24h
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

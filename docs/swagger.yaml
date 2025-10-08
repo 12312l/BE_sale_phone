@@ -27,17 +27,20 @@ definitions:
       email:
         type: string
       fullname:
+        maxLength: 50
+        minLength: 2
         type: string
       gender:
         type: string
       password:
+        minLength: 6
         type: string
       phone:
         type: string
       username:
+        minLength: 3
         type: string
     required:
-    - dob
     - email
     - fullname
     - gender
@@ -54,6 +57,40 @@ definitions:
     required:
     - password
     - username
+    type: object
+  request.LogoutRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  response.ApiResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  response.UserResponse:
+    properties:
+      dob:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      phone:
+        type: string
+      role:
+        type: string
+      username:
+        type: string
     type: object
 host: localhost:8080
 info:
@@ -98,6 +135,28 @@ paths:
       summary: Đăng nhập
       tags:
       - Auth
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Thêm token vào danh sách vô hiệu hoá
+      parameters:
+      - description: Token cần vô hiệu hoá
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.LogoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Đăng xuất người dùng
+      tags:
+      - Auth
   /users/:
     get:
       description: Trả về danh sách user trong hệ thống
@@ -127,15 +186,38 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/models.User'
         "400":
-          description: Lỗi dữ liệu
+          description: Bad Request
           schema:
-            type: string
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
       summary: Tạo mới người dùng
+      tags:
+      - User
+  /users/{id}:
+    get:
+      description: Trả về thông tin chi tiết của người dùng theo ID
+      parameters:
+      - description: ID của người dùng
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UserResponse'
+      summary: Lấy thông tin người dùng theo ID
       tags:
       - User
 swagger: "2.0"

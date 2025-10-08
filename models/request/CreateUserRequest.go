@@ -1,13 +1,11 @@
 package request
 
-import "time"
-
 type CreateUserRequest struct {
-	Username string     `json:"username" binding:"required"`
-	Password string     `json:"password" binding:"required"`
-	Email    string     `json:"email" binding:"required"`
-	FullName string     `json:"fullname" binding:"required"`
-	Phone    string     `json:"phone" binding:"required"`
-	Gender   string     `json:"gender" binding:"required"`
-	Dob      *time.Time `json:"dob" binding:"required"`
+	Username string `json:"username" binding:"required,min=3"`
+	Password string `json:"password" binding:"required,min=6"`
+	Email    string `json:"email" binding:"required,email"`
+	FullName string `json:"fullname" binding:"required,min=2,max=50"`
+	Phone    string `json:"phone" binding:"required"`
+	Gender   string `json:"gender" binding:"required"`
+	Dob      string `json:"dob"`
 }

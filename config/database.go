@@ -22,7 +22,10 @@ func ConnectDatabase() {
 
 	DB = database
 	// Tự động tạo bảng nếu chưa có
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(
+		&models.User{},
+		&models.InvalidatedToken{},
+	)
 	createDefaultAdmin()
 
 	fmt.Println("✅ Kết nối database thành công!")

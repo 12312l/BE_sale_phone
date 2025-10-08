@@ -2,9 +2,11 @@ package main
 
 import (
 	"daoduy.com/hoc-golang/config"
-	"daoduy.com/hoc-golang/routes"
 	_ "daoduy.com/hoc-golang/docs" // 👈 Quan trọng: import docs tự sinh bởi swag
+	"daoduy.com/hoc-golang/middleware"
+	"daoduy.com/hoc-golang/routes"
 
+	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
@@ -27,10 +29,13 @@ func main() {
 	// Kết nối DB
 	config.ConnectDatabase()
 
-	// Khởi tạo router
-	r := routes.SetupRouter()
+	r := gin.Default()
+	r.Use(middleware.GlobalExceptionHandler())
 
-	// Swagger endpoint —> http://localhost:8080/swagger/index.html
+	// Khởi tạo router
+	routes.SetupRouter(r)
+
+	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(":8080")
