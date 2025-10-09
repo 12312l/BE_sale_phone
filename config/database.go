@@ -26,6 +26,13 @@ func ConnectDatabase() {
 		&models.User{},
 		&models.InvalidatedToken{},
 		&models.Address{},
+		&models.Category{},
+		&models.Product{},
+		&models.ProductVariant{},
+		&models.Image{},
+		&models.Color{},
+		&models.Sepecification{},
+		&models.SepecificationDetail{},
 	)
 	createDefaultAdmin()
 

@@ -287,6 +287,90 @@ const docTemplate = `{
                 }
             }
         },
+        "/categories/": {
+            "get": {
+                "description": "Lấy danh sách tất cả danh mục",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Lấy danh sách tất cả danh mục",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.CategoryResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Tạo danh mục",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Tạo danh mục",
+                "parameters": [
+                    {
+                        "description": "Thông tin danh mục",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.CategoryResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{path}": {
+            "get": {
+                "description": "Lấy danh mục theo path",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Lấy danh mục theo path",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Path của danh mục",
+                        "name": "path",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.CategoryResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/": {
             "get": {
                 "description": "Trả về danh sách user trong hệ thống",
@@ -517,6 +601,21 @@ const docTemplate = `{
                 }
             }
         },
+        "request.CategoryRequest": {
+            "type": "object",
+            "required": [
+                "image_url",
+                "name"
+            ],
+            "properties": {
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "request.CreateUserRequest": {
             "type": "object",
             "required": [
@@ -622,6 +721,23 @@ const docTemplate = `{
                 },
                 "data": {},
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CategoryResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
                     "type": "string"
                 }
             }

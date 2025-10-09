@@ -65,6 +65,16 @@ definitions:
       village:
         type: string
     type: object
+  request.CategoryRequest:
+    properties:
+      image_url:
+        type: string
+      name:
+        type: string
+    required:
+    - image_url
+    - name
+    type: object
   request.CreateUserRequest:
     properties:
       dob:
@@ -138,6 +148,17 @@ definitions:
         type: integer
       data: {}
       message:
+        type: string
+    type: object
+  response.CategoryResponse:
+    properties:
+      id:
+        type: integer
+      image_url:
+        type: string
+      name:
+        type: string
+      path:
         type: string
     type: object
   response.UserResponse:
@@ -342,6 +363,61 @@ paths:
       summary: Đăng xuất người dùng
       tags:
       - Auth
+  /categories/:
+    get:
+      description: Lấy danh sách tất cả danh mục
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.CategoryResponse'
+            type: array
+      summary: Lấy danh sách tất cả danh mục
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Tạo danh mục
+      parameters:
+      - description: Thông tin danh mục
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.CategoryResponse'
+      summary: Tạo danh mục
+      tags:
+      - Category
+  /categories/{path}:
+    get:
+      description: Lấy danh mục theo path
+      parameters:
+      - description: Path của danh mục
+        in: path
+        name: path
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.CategoryResponse'
+      summary: Lấy danh mục theo path
+      tags:
+      - Category
   /users/:
     get:
       description: Trả về danh sách user trong hệ thống

@@ -44,5 +44,15 @@ func SetupRouter(r *gin.Engine) *gin.Engine {
 		}
 	}
 
+	categoryRoutes := r.Group("/categories")
+	{
+		categoryRoutes.GET("/", controllers.GetAllCategories)
+		categoryRoutes.GET("/:path", controllers.GetCategoryByPath)
+		categoryRoutes.Use(middleware.AuthMiddleware("ADMIN"))
+		{
+			categoryRoutes.POST("/", controllers.CreateCategory)
+		}
+	}
+
 	return r
 }

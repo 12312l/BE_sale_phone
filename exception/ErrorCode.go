@@ -24,4 +24,6 @@ var (
 	AddressNotFound        = ErrorCode{1012, "Address not found", http.StatusNotFound}
 	DatabaseError          = ErrorCode{1013, "Database error", http.StatusInternalServerError}
 	InvalidID              = ErrorCode{1014, "Invalid ID format", http.StatusBadRequest}
+	CategoryNotFound       = ErrorCode{1015, "Category not found", http.StatusNotFound}
+	ProductNotFound        = ErrorCode{1016, "Product not found", http.StatusNotFound}
 )
