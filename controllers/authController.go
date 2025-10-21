@@ -29,7 +29,7 @@ func Login(ctx *gin.Context) {
 
 	token, err := services.Login(req)
 	if err != nil {
-		ctx.Error(exception.NewAppException(exception.Unauthorized))
+		// ctx.Error(exception.NewAppException(exception.Unauthenticated))
 		return
 	}
 
@@ -61,3 +61,29 @@ func Logout(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, response.Success(nil))
 }
+
+// @Summary Đăng ký tài khoản
+// @Description Người dùng tự đăng ký tài khoản mới
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param request body request.CreateUserRequest true "Thông tin đăng ký"
+// @Success 201 {object} models.User
+// @Failure 400 {object} response.ApiResponse
+// @Failure 500 {object} response.ApiResponse
+// @Router /auth/register [post]
+func Register(ctx *gin.Context) {
+	var req request.CreateUserRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.Error(exception.NewAppException(exception.InvalidKey))
+		return
+	}
+
+	newUser, err := services.Register(req)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ctx.JSON(http.StatusCreated, response.Success(newUser))
+}
+

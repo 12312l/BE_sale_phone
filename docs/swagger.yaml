@@ -98,7 +98,6 @@ definitions:
     required:
     - email
     - fullname
-    - gender
     - password
     - phone
     - username
@@ -361,6 +360,36 @@ paths:
           schema:
             $ref: '#/definitions/response.ApiResponse'
       summary: Đăng xuất người dùng
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Người dùng tự đăng ký tài khoản mới
+      parameters:
+      - description: Thông tin đăng ký
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ApiResponse'
+      summary: Đăng ký tài khoản
       tags:
       - Auth
   /categories/:

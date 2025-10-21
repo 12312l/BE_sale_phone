@@ -6,6 +6,6 @@ type CreateUserRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	FullName string `json:"fullname" binding:"required,min=2,max=50"`
 	Phone    string `json:"phone" binding:"required"`
-	Gender   string `json:"gender" binding:"required"`
+	Gender   string `json:"gender"`
 	Dob      string `json:"dob"`
 }

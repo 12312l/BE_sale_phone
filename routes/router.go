@@ -10,6 +10,7 @@ func SetupRouter(r *gin.Engine) *gin.Engine {
 	authRouters := r.Group("/auth")
 	{
 		authRouters.POST("/login", controllers.Login)
+		authRouters.POST("/register", controllers.Register)
 		authRouters.Use(middleware.AuthMiddleware())
 		{
 			authRouters.POST("/logout", controllers.Logout)

@@ -12,23 +12,22 @@ import (
 	"daoduy.com/hoc-golang/models/response"
 	"daoduy.com/hoc-golang/utils"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/jinzhu/copier"
 )
 
 func Login(req request.LoginRequest) (string, error) {
 	var user models.User
 	if err := config.DB.Where("username = ?", req.Username).First(&user).Error; err != nil {
-		return "", errors.New("Người dùng không tồn tại")
+		return "", exception.NewAppException(exception.UserExisted)
 	}
 
 	if !utils.CheckPasswordHash(req.Password, user.Password) {
 		return "", errors.New("Mật khẩu không chính xác")
 	}
-
-	// 👇 Chuẩn bị UserResponse để truyền vào GenerateToken
 	userResponse := response.UserResponse{
 		ID:       user.ID,
 		Username: user.Username,
-		Role:     user.Role, // nếu user.Role là string hoặc user.Roles[0].Name thì chỉnh tương ứng
+		Role:     user.Role, 
 	}
 
 	// 👇 Truyền thêm user.Role vào claim
@@ -82,4 +81,37 @@ func Logout(tokenString string) error {
 	}
 
 	return nil
+}
+
+
+func Register(userRequest request.CreateUserRequest) (models.User, error) {
+	// Check username tồn tại
+	var existing models.User
+	if err := config.DB.Where("username = ?", userRequest.Username).First(&existing).Error; err == nil {
+		return models.User{}, exception.NewAppException(exception.UserExisted)
+	}
+	if len(userRequest.Username) < 3 {
+		return models.User{}, exception.NewAppException(exception.UsernameInvalid)
+	}
+	if len(userRequest.Password) < 8 {
+		return models.User{}, exception.NewAppException(exception.InvalidPassword)
+	}
+	if len(userRequest.FullName) < 2 || len(userRequest.FullName) > 50 {
+		return models.User{}, exception.NewAppException(exception.InvalidFullname)
+	}
+	
+	// Mã hoá mật khẩu
+	hashedPassword, err := utils.HashPassword(userRequest.Password)
+	if err != nil {
+		return models.User{}, exception.NewAppException(exception.InvalidPassword)
+	}
+
+	var user models.User
+	copier.Copy(&user, &userRequest)
+	user.Password = hashedPassword
+
+	if err := config.DB.Create(&user).Error; err != nil {
+		return models.User{}, exception.NewAppException(exception.DatabaseError)
+	}
+	return user, nil
 }

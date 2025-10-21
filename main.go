@@ -1,11 +1,14 @@
 package main
 
 import (
+	"time"
+
 	"daoduy.com/hoc-golang/config"
 	_ "daoduy.com/hoc-golang/docs" // 👈 Quan trọng: import docs tự sinh bởi swag
 	"daoduy.com/hoc-golang/middleware"
 	"daoduy.com/hoc-golang/routes"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -41,6 +44,17 @@ func main() {
 
 	r := gin.Default()
 	r.Use(middleware.GlobalExceptionHandler())
+
+		// Cấu hình CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 
 	// Khởi tạo router
 	routes.SetupRouter(r)
